@@ -6,19 +6,20 @@ var app = express();
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test', { useMongoClient: true });
 mongoose.Promise = global.Promise;
+var Cliente = mongoose.model('Cliente', { name: String, email: String, fone: String });
+
+var saida;
 
 app.get('/', function (req, res) {
 
     console.log("iniciando get");
-    
-    var Cat = mongoose.model('Cat', { name: String });
-    
-    var kitty = new Cat({ name: 'Mingau' });
-    kitty.save(function (err) {
+
+    var Cli = new Cliente({ name: 'mariaX', email:'maria@gmail', fone:'123456' });
+    Cli.save(function (err) {
       if (err) {
         console.log(err);
       } else {
-        console.log('meow');
+        console.log('OK');
       }
     });
 
@@ -26,17 +27,17 @@ app.get('/', function (req, res) {
 });
 
 app.get('/ler', function (req, res) {
-    
+      
         console.log("iniciando ler");
         
-        var Cat = mongoose.model('Cat', { name: String });
-        Cat.find({name:'Mingau'},function (err, kittens) {
+        Cliente.find({name:'mariaX'},function (err, cli) {
             if (err) return console.error(err);
-            console.log(kittens);
+            console.log("log="+cli);
+            res.send(cli);
           })
     
-        res.send("lido");
-    });
+        //res.send("saida="+JSON.stringify(saida));
+    })
 
 
 app.listen(3000, function () {
